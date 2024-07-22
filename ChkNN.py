@@ -89,34 +89,21 @@ print(len(image_datasetsL))
 class Net(nn.Module):
 	def __init__(self, args):
 		super(Net, self).__init__()
-		self.conv1 = nn.Conv2d(1, 200, 5, 4)   
-		self.conv2 = nn.Conv2d(200, 500, 3, 2) 
-		self.conv3 = nn.Conv2d(500, 500, 2, 2)
-	
+		self.conv1 = nn.Conv2d(1, 200, 5, 1)   
+		self.conv2 = nn.Conv2d(200, 500, 5, 1) 
 		self.fc1 = nn.Linear(500, 200) 
-
-		self.fc2 = nn.Linear(24500, 500)
-
-		self.fc3 = nn.Linear(500, 1000)
-
-		
+		self.fc2 = nn.Linear(24500, 500)		
 		self.tp = hypnn.ToPoincare(c=-1, train_x=100, train_c=100, ball_dim=1000)
-
-		
-		self.mlr = hypnn.HyperbolicMLR(ball_dim=1000, n_classes=2, c=-1)   
-
+		self.mlr = hypnn.HyperbolicMLR(ball_dim=1000, n_classes=2, c=-1)  
 		self.dropout = nn.Dropout(0.5)         # Apply dropout
 
 	def forward(self, x):
 		x = F.relu(self.conv1(x))
 		x = F.max_pool2d(x, 2, 2)  
-
 		x = F.relu(self.conv2(x))
 		x = F.max_pool2d(x, 2, 2)
-
 		x = x.view(x.size(0), -1)
 		x = F.relu(self.fc2(x))
-		x = self.fc3(x)
 		x = self.dropout(x)        # Apply dropout
 		x = self.tp(x)
 		return F.log_softmax(self.mlr(x, c=self.tp.c), dim=-1)
