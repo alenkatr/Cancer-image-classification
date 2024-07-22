@@ -142,11 +142,11 @@ for X, y in dloader:
 print(len(outputs1))
 
 
-# flatten list of features to remove batches!!!!!!!!!!!!!!----in numpy array....
+# flatten list of features to remove batches
 list_features1 = [item for sublist in outputs1 for item in sublist]
 
 print(len(list_features1))    #vseh features je 643
-print(np.array(list_features1[0]).shape)   #dolžina ene feature je 512
+print(np.array(list_features1[0]).shape)   
 
 Xmy = np.array(list_features1)
 print(f"Mn X {Xmy.shape}")
@@ -184,7 +184,7 @@ for k in range(1,11):
     knn = neighbors.KNeighborsClassifier(n_neighbors=k, algorithm='brute', metric='euclidean', n_jobs=3)    #algorithm='ball_tree' - for a custom metric
     #fit the model
     knn.fit(Xmy,yL)
-    #cross validation-------------------------------after knn
+    #cross validation--
     scores = cross_val_score(knn, Xmy, yL, cv=10, scoring='accuracy')
     k_scoresEMlc.append(scores.mean())
     k_scoresEMstdlcresnet.append(scores.std())
@@ -194,8 +194,8 @@ for k in range(1,11):
            'recall' : make_scorer(recall_score, average='macro'), 
            'f1_score' : make_scorer(f1_score, average='macro')}
 
-    kfold = StratifiedKFold(n_splits=10) #if it is: kfold = KFold(n_splits=10, random_state=42)-->error: Setting a random_state has no effect since shuffle is False. You should leave random_state to its default (None), or set shuffle=True.
     #results = cross_val_score(estimator=kNNa, X=Xa1,y=yL,cv=kfold,scoring=scoring)
+    kfold = StratifiedKFold(n_splits=10)
     resultsAmy = cross_validate(estimator=knn, X=Xmy, y=yL, cv=kfold, scoring=scoringA)
     meanA = np.mean(resultsAmy['test_accuracy']) #mere, izracunane s pomocjo cross_validate funkcije, za vsak k posebej
     meanA1my.append(meanA)
@@ -264,7 +264,7 @@ def poincare_distance(row1, row2):
 
 
 
-mmscaler = preprocessing.MinMaxScaler()    #data leakage? no, because i us cross-validation
+mmscaler = preprocessing.MinMaxScaler()    
 Xminmaxl1 = mmscaler.fit_transform(Xmy)
 #print(Xminmaxb1)
 
@@ -285,7 +285,7 @@ for k in range(1,11):
     #knn = neighbors.KNeighborsClassifier(n_neighbors=5, algorithm='brute', metric='euclidean')    #algorithm='ball_tree' - for a custom metric
     #fit the model
     knn.fit(((Xminmaxl1)),yL)
-    #cross validation-------------------------------after knn
+    #cross validation
     scores = cross_val_score(knn, ((Xminmaxl1)), yL, cv=10, scoring='accuracy')
     k_scoresP1bl1.append(scores.mean())
     k_scoresP1stdbl1.append(scores.std())
@@ -295,7 +295,7 @@ for k in range(1,11):
            'recall' : make_scorer(recall_score, average='macro'), 
            'f1_score' : make_scorer(f1_score, average='macro')}
 
-    kfold = StratifiedKFold(n_splits=10) #if it is: kfold = KFold(n_splits=10, random_state=42)-->error: Setting a random_state has no effect since shuffle is False. You should leave random_state to its default (None), or set shuffle=True.
+    kfold = StratifiedKFold(n_splits=10)
     resultsAm = cross_validate(estimator=knn, X=((Xminmaxl1)), y=yL, cv=kfold, scoring=scoringA)
     meanA = np.mean(resultsAm['test_accuracy']) #mere, izracunane s pomocjo cross_validate funkcije, za vsak k posebej
     meanA1m.append(meanA)
