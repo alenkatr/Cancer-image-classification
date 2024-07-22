@@ -1,4 +1,4 @@
-#rChkNN.py
+#ChkNN.py
 #
 #januar 2023
 #
