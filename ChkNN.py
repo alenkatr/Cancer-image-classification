@@ -1,4 +1,4 @@
-#rmycnnpPMskin.py
+#rChkNN.py
 #
 #januar 2023
 #
@@ -107,7 +107,6 @@ class Net(nn.Module):
 		x = self.dropout(x)        # Apply dropout
 		x = self.tp(x)
 		return F.log_softmax(self.mlr(x, c=self.tp.c), dim=-1)
-		#return(x)
 ########################
 ########################
 ########################
