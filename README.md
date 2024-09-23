@@ -1,1 +1,1 @@
-ChkNN method for cancer image classification.
+ChkNN method for different cancer image classification.
